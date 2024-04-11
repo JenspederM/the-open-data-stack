@@ -10,6 +10,11 @@ PLATFORM_NAMESPACE:="platform"
 default: 
     @just --list
 
+start name env="local":
+    @just init
+    @just install "{{env}}"
+    @just tenant-add "{{name}}" "{{env}}"
+
 init:
     @echo "Initializing the project from config at $(CONFIG_PATH)"
     @echo ""
@@ -34,7 +39,7 @@ init:
 
     just get-config
 
-forget:
+destroy:
     @echo "Deleting the cluster and all resources"
     k3d cluster delete -c cluster.yaml
 

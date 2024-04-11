@@ -12,31 +12,49 @@ The stack will include the following layers:
 - A catalog layer that can be used to discover data stored in the storage layer.
 - A visualization layer that can be used to visualize data stored in the storage layer.
 
-## Storage
+## Prerequisites
 
-The storage layer will be built on Minio.
+- [Docker](https://docs.docker.com/get-docker/)
+- [k3d](https://k3d.io/#installation)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [helm](https://helm.sh/docs/intro/install/)
+- [just](https://github.com/casey/just)
 
-### Installation
+## Getting Started
 
-First we need to install the Minio operator following this guide [here](https://min.io/docs/minio/kubernetes/upstream/operations/install-deploy-manage/deploy-operator-helm.html#minio-k8s-deploy-operator-helm).
+Convenience functions that can be accessed through `just`:
+
+- `just` Prints this help message
+- `just destroy` Deletes the cluster and all associated resources
+- `just get-config` Gets and saves the default `values.yaml` file associated with versioned stack components to the `config/default` directory as `<component>-<version>.yaml`
+- `just get-minio-jwt` Get the decoded Minio JWT token for the Minio Operator
+- `just init` Adds helm repos and initializes the cluster
+- `just install env="local"` Installs core stack components, such as Ingress, Cert-Manager, and Operators under a specific environment
+- `just start name env="local"` Runs `init`, `install`, and adds a tenant to the stack
+- `just tenant-add name env="local"` Creates a namespace with a Minio tenant and JupyterHub instance
+
+Running the stack locally:
 
 ```bash
-# Add the MinIO Helm repository
-helm repo add minio-operator https://operator.min.io/
-
-# Save the values.yaml
-helm show values minio-operator/operator --version 5.0.12 > minio-operator.local.yaml
-
-# Install the MinIO Operator
-helm upgrade --install minio-operator minio-operator/operator --values minio-operator.local.yaml
+### Initialize the stack
+# This will add the necessary helm repos and initialize the cluster
+# Next it will install the core stack components and add a tenant called `mycompany`
+# It will use the overrides found in the `config/local` directory
+just start mycompany env="local"
 ```
 
-Then we can install the Minio instance following this guide [here](https://min.io/docs/minio/kubernetes/upstream/operations/install-deploy-manage/deploy-minio-helm.html#minio-k8s-deploy-minio-helm).
+To add another tenant to the stack:
 
 ```bash
-# Save the values.yaml
-helm show values minio-operator/tenant --version 5.0.12 > minio-tenant.local.yaml
+### Add a tenant to the stack
+# This will create a namespace with a Minio tenant and JupyterHub instance
+just tenant-add mycompany env="local"
+```
 
-# Install the MinIO Tenant
-helm upgrade --install minio-tenant minio-operator/tenant --values minio-tenant.local.yaml
+To destroy the stack:
+
+```bash
+### Destroy the stack
+# This will delete the cluster and all associated resources
+just destroy
 ```
