@@ -1,0 +1,14 @@
+singleuser:
+  networkPolicy:
+    enabled: true
+    egressAllowRules:
+      privateIPs: true
+
+ingress:
+  enabled: true
+  annotations: {}
+  ingressClassName: "nginx"
+  hosts: 
+    - jupyterhub.localhost
+  pathType: Prefix
+  tls: []

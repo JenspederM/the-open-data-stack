@@ -1,0 +1,11 @@
+console:
+  enabled: true
+  ingress:
+    enabled: true
+    host: console.localhost
+    ingressClassName: "nginx"
+    labels: { }
+    annotations: {}
+    tls: []
+    path: /
+    pathType: Prefix

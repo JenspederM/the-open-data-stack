@@ -1,0 +1,43 @@
+tenant:
+  certificate:
+    requestAutoCert: false
+    externalCertSecret: ""
+  exposeServices:
+    api: true
+    console: true
+  pools:
+  - servers: 4
+    name: pool-0
+    volumesPerServer: 4
+    size: 10Gi
+    storageClassName: local-path
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: "OnRootMismatch"
+      runAsNonRoot: true
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      runAsNonRoot: true
+
+ingress:
+  api:
+    enabled: true
+    ingressClassName: "nginx"
+    labels: {}
+    annotations: {}
+    tls: []
+    host: minio.localhost
+    path: /
+    pathType: Prefix
+  console:
+    enabled: true
+    host: tenant.localhost
+    ingressClassName: "nginx"
+    labels: {}
+    annotations: {}
+    tls: []
+    path: /
+    pathType: Prefix
