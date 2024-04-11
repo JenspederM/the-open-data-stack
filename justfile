@@ -1,12 +1,14 @@
+# Defaults
+PLATFORM_NAMESPACE:="platform"
 CONFIG_PATH:="config"
+
+# Versions
 CERT_MANAGER_VERSION:="v1.14.4"
 NGINX_VERSION:="4.10.0"
 MINIO_VERSION:="5.0.14"
 JUPYTERHUB_VERSION:="3.3.7"
 
-# This namespace will contain operaters and other cluster-wide resources
-PLATFORM_NAMESPACE:="platform"
-
+# Commands
 default: 
     @just --list
 

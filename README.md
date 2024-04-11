@@ -58,3 +58,54 @@ To destroy the stack:
 # This will delete the cluster and all associated resources
 just destroy
 ```
+
+## The `justfile`
+
+The justfile is used the manage the lifecycle of the stack. It is a simple way to define and run tasks. The `just` command is a CLI tool that reads the `justfile` and executes the tasks defined within it.
+
+Additionally, it defines the versions of the stack components that are used to deploy the stack. These versions are used to fetch the default `values.yaml` files for each component and later to deploy the stack.
+
+To modify the versions of the stack components, update the `justfile` with the desired versions.
+
+```bash
+# Defaults
+PLATFORM_NAMESPACE:="platform" # Reserves the namespace for the platform components (e.g. Ingress, Cert-Manager, Operators)
+CONFIG_PATH:="config" # Path to the configuration files
+
+# Versions
+CERT_MANAGER_VERSION:="<version>"
+NGINX_VERSION:="<version>"
+MINIO_VERSION:="<version>"
+JUPYTERHUB_VERSION:="<version>"
+
+# Commands
+...
+```
+
+## The `config` directory
+
+The `config` directory contains the default `values.yaml` files for each versioned stack component. These files are used to deploy the stack.
+
+To fetch the default `values.yaml` files for each component, run the following command:
+
+```bash
+just get-config
+```
+
+This will fetch the default `values.yaml` files for each component and save them to the `config/default` directory named according to `<stack>-<version>.yaml`.
+
+### `config/<environment>` directories
+
+In addition to the `config/default` directory, there are directories for each environment that contain overrides for the default `values.yaml` files. These overrides are used to deploy the stack under a specific environment. For example, the `config/local` directory contains the overrides for the `local` environment.
+
+To deploy the stack under a specific environment, run the following command:
+
+```bash
+just start mycompany env="local"
+```
+
+This will deploy the stack using the default `values.yaml` files and the overrides found in the `config/local` directory.
+
+> Note: The `env` flag is optional. If not provided, the stack will be deployed using the local `values.yaml` files.
+> Note: The `name` flag is required. It is used to name the tenant and namespace.
+> Note: value override files must be named according to `<stack>-<version>.yaml`.
