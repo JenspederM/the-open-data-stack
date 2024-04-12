@@ -3,6 +3,29 @@ singleuser:
     enabled: true
     egressAllowRules:
       privateIPs: true
+  image:
+    name: jupyter/minimal-notebook
+    tag: python-3.11
+  profileList:
+    - display_name: "Minimal environment"
+      description: "To avoid too much bells and whistles: Python."
+      default: true
+    - display_name: "Spark environment"
+      description: "The Jupyter Stacks spark image!"
+      kubespawner_override:
+        image: quay.io/jupyter/all-spark-notebook:spark-3.5.1
+    - display_name: "Learning Data Science"
+      description: "Datascience Environment with Sample Notebooks"
+      kubespawner_override:
+        image: jupyter/datascience-notebook:python-3.11
+        lifecycle_hooks:
+          postStart:
+            exec:
+              command:
+                - "sh"
+                - "-c"
+                - >
+                  gitpuller https://github.com/data-8/materials-fa17 master materials-fa;
 
 ingress:
   enabled: true
