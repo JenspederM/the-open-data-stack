@@ -37,7 +37,7 @@ init:
 
     @echo ""
     @echo "Creating the cluster"
-    k3d cluster create -c cluster.yaml || "Cluster already exists"
+    k3d cluster create -c cluster.yaml || echo "Cluster already exists"
 
     just get-config
 
