@@ -1,6 +1,7 @@
 # Defaults
 PLATFORM_NAMESPACE:="platform"
 CONFIG_PATH:="config"
+CLUSTER_CONFIG:="cluster.yaml"
 
 # Versions
 CERT_MANAGER_VERSION:="v1.14.4"
@@ -37,13 +38,13 @@ init:
 
     @echo ""
     @echo "Creating the cluster"
-    k3d cluster create -c cluster.yaml || echo "Cluster already exists"
+    k3d cluster create -c {{CLUSTER_CONFIG}} || echo "Cluster already exists"
 
     just get-config
 
 destroy:
     @echo "Deleting the cluster and all resources"
-    k3d cluster delete -c cluster.yaml
+    k3d cluster delete -c {{CLUSTER_CONFIG}}
 
 get-minio-jwt:
     kubectl -n {{PLATFORM_NAMESPACE}} get secret console-sa-secret -o jsonpath="{.data.token}" | base64 --decode
