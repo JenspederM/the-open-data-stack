@@ -1,4 +1,9 @@
 tenant:
+  buckets: [
+    {
+      "name": "local",
+    }
+  ]
   certificate:
     requestAutoCert: false
     externalCertSecret: ""
